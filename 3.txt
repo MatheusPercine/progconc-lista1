@@ -1,0 +1,43 @@
+a)
+S1
+S3
+S2
+
+b)
+
+Thread 1:
+lock(mutex);
+if (thd->proc_info) {
+    fputs(thd->proc_info, ...);
+    thd->proc_info = NULL;
+}
+unlock(mutex);
+
+Thread 2:
+lock(mutex);
+thd->proc_info = NULL;
+unlock(mutex);
+
+c)
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
+int mThreadInitialized = 0;
+
+// Thread 1
+void init (...) {
+    mThread = PR_CreateThread(mMain, ...);
+    mThreadInitialized = 1;
+    pthread_cond_signal(&cond); // Sinaliza que mThread foi inicializada
+    ...
+}
+
+// Thread 2
+void mMain (...) {
+    pthread_mutex_lock(&mutex);
+    while (!mThreadInitialized) {
+        pthread_cond_wait(&cond, &mutex); // Aguarda até que mThread seja inicializada
+    }
+    mState = mThread->State;
+    pthread_mutex_unlock(&mutex);
+    ...
+}

@@ -1,0 +1,19 @@
+a)
+Seção crítica refere-se ao trecho do código onde uma variável compartilhada por mais de uma thread é acessada (leitura/escrita).
+
+b)
+Corrida de dados ocorre quando o resultado da execução do programa depende ordem em que duas ou mais threads acessam uma mesma área de memória e ao menos uma das operações é de escrita. Essa ordem não é determinística ou não é controlada de forma adequada, podendo levar a erros como resultados não esperados.
+
+c)
+A violação de atomicidade em um programa concorrente ocorre quando uma operação que deveria ser executada de forma atômica é interrompida ou dividida por outras operações de outras threads, como em operações que envolvem a leitura ou escrita de dados compartilhados, levando a resultados não esperados.
+
+d)
+A violação de ordem significa que o resultado final do programa pode ser diferente dependendo da ordem em que as operações são executadas pelas threads, mesmo que o código pareça estar estruturado em uma determinada sequência lógica.
+
+e)
+A primeira thread que chegar ao lock primeiro tem acesso a "chave" e "tranca" o acesso a seção critica para outras threads, quando a thread termina a seção crítica, ela "destranca" esta e passa a chave para próxima thread que a tranca de novo.
+
+f)
+
+g)
+Por que visa garantir que as seções críticas do código não sejam executados ao mesmo tempo por mais de uma thread, evitando erros de sobrescrição quando duas ou mais threads acessam uma mesma área de memória e resultados inesperados.

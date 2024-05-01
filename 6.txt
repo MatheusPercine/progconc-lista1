@@ -1,0 +1,46 @@
+int leit=0; //contador de threads lendo
+int escr=0; //contador de threads escrevendo
+pthread_mutex_t mutex; pthread_cond_t cond_leit, cond_escr;
+
+//entrada leitura
+void InicLeit() {
+    pthread_mutex_lock(&mutex);
+    while(escr > 0)
+        pthread_cond_wait(&cond_leit, &mutex);
+    leit++;
+    pthread_mutex_unlock(&mutex); 
+}
+
+//saida leitura
+void FimLeit() {
+    pthread_mutex_lock(&mutex);
+    leit--;
+    if(leit==0)
+        pthread_cond_signal(&cond_escr);
+    pthread_mutex_unlock(&mutex)
+}
+
+//entrada escrita
+void InicEscr() {
+    pthread_mutex_lock(&mutex);
+    while((leit>0) || (escr>0)) {
+        pthread_cond_wait(&cond_escr, &mutex);
+    } 
+    escr++; 
+    pthread_mutex_unlock(&mutex);
+}
+
+//saida escrita
+void FimEscr() {
+    pthread_mutex_lock(&mutex);
+    escr--;
+    pthread_cond_signal(&cond_escr);
+    pthread_cond_broadcast(&cond_leit);
+    pthread_mutex_unlock(&mutex);
+}
+
+
+a)
+
+b)
+Os blocos while não podem ser substituídos por blocos if neste contexto. Isso porque os blocos while são necessários para garantir que as threads esperem de forma ativa enquanto as condições não são atendidas.

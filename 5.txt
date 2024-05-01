@@ -1,0 +1,34 @@
+float saldo=100.0; pthread_mutex_t l;
+
+void retira (float val){
+    pthread_mutex_lock(&l);
+    saldo = saldo-val;
+    pthread_mutex_unlock(&l);
+}
+
+float le() {
+    pthread_mutex_lock(&l);
+    float s = saldo;
+    pthread_mutex_unlock(&l);
+    return s; 
+}
+
+void* tarefa(void* arg) {
+    float val = *(float *) arg;
+    float meuSaldo = le();
+    if(meuSaldo >= val) retira(val);
+}
+
+a)
+Sim, é possível que o valor do saldo fique negativo. Isso pode acontecer se duas ou mais threads chamarem a função retira() ao mesmo tempo e cada uma delas verificar o saldo antes de fazer a retirada. Nesse cenário, cada thread pode ver um saldo suficiente para a retirada, mas ao realizar a operação de subtração, o valor final do saldo pode ser negativo.
+
+b)
+Para corrigir isso e garantir que o saldo não fique negativo, podemos usar uma verificação adicional dentro da função retira() para garantir que o saldo seja sempre positivo antes de subtrair o valor da retirada. 
+
+void retira(float val) {
+    pthread_mutex_lock(&l);
+    if (saldo >= val) {
+        saldo -= val;
+    }
+    pthread_mutex_unlock(&l);
+}
